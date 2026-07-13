@@ -1,11 +1,17 @@
-﻿using System.Net.Mail;
-using System.Text.RegularExpressions;
+﻿using DetectApi.Exceptions;
 using DetectApi.Models;
-
+using System.Net.Mail;
+using System.Text.RegularExpressions;
+    
 namespace DetectApi.Services
 {
     public class InformationTypeDetectService : IInformation
     {
+        private readonly FormatExceptionHandler exceptionHandler;
+        public InformationTypeDetectService()
+        {
+            exceptionHandler = new FormatExceptionHandler();
+        }
         public DetectResponse Detect(DetectRequest request)
         {
             if (request == null || string.IsNullOrEmpty(request.Value))
@@ -13,7 +19,8 @@ namespace DetectApi.Services
                 return new DetectResponse
                 {
                     Type = "Unknown",
-                    Provider = null
+                    Provider = null,
+                    Message = "Value cannot be empty."
                 };
             }
 
@@ -42,8 +49,7 @@ namespace DetectApi.Services
             }
             else
             {
-                response.Type = "Unknown";
-                response.Provider = null;
+                return exceptionHandler.TypeHandler(request.Value);
             }
 
             return response;

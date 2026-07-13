@@ -4,5 +4,6 @@ namespace DetectApi.Models
     {
         public string Type { get; set; } = string.Empty;
         public string? Provider { get; set; }
+        public string? Message { get; set; }
     }
 }
